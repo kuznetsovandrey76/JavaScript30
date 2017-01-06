@@ -13,17 +13,27 @@
 			margin: 10px;
 			padding: 10px;
 			border: 1px solid;
-			background: lightblue;
+			background: lemonchiffon ;
 			font-size: 2em;
 		}
 		span {
 			margin-right: 5px;
-			font-weight: bold;
 		}
 		a {
 			text-decoration: none;
 			margin-right: .5em;
-			color: darkred;
+			color: darkslateblue;
+		}
+		.rightNow {
+			visibility: hidden;	
+		}
+		.start {
+			color: red;
+			visibility: visible;
+		}
+		.finished {
+			color: green;
+			visibility: visible;
 		}
 	</style>
 </head>
@@ -32,7 +42,7 @@
 
 (function() {
 
-	var lessons = [
+	var lessons = [ // Список всех уроков
 		'JavaScript Drum Kit', 
 		'JS + CSS Clock', 
 		'CSS Variables', 
@@ -64,20 +74,34 @@
 		'Whack A Mole'
 	];
 
-	function addZero(i) {
-			if (i < 10) { i = "0" + i } return i;
+	var me = [ 
+		// Каждому эллементу соответствует свой урок. Отмечать начал  или закончил	
+		// (s) start || (f) finished
+		'', '', '', '', '', '', '', '', 's', '', // 01-10 
+		'', '', '', '', '', '', '', '', '', '', // 11-20
+		'', '', '', '', '', '', '', '', '', ''  // 21-30
+	];
+
+	function addZero(i) { // добавляю к числам 0 если они < 10
+		if (i < 10) { i = "0" + i } return i;
 	}
 
 	for(let i = 0; i < lessons.length; i++ ) {
-		var link = '<span>' + addZero((i+1)) + '</span> ' + lessons[i];	
+		// Номер урока с названием
+		var link = '<span>' + addZero((i+1)) + '.</span> ' + lessons[i];	
 		
-		var main =  '' + addZero((i+1)) + '-' + lessons[i].replace(/ /g, '');
-		var my = main + '/index.html';
-		var start =  main + '/index-START.html';
-		var finished = main + '/index-FINISHED.html';
+		// Основная часть ссылки
+		var main =  '' + addZero((i+1)) + '-' + lessons[i].replace(/ /g, ''); // <- Убираю все пробелы
+		var myLink = main + '/index.html';
+		var startLink =  main + '/index-START.html';
+		var finishedLink = main + '/index-FINISHED.html';
 
-		var block = '<div><p>' + link + '</p><a href=' + my + '>&#9935;MY</a><a href=' + start + '>&#9746;START</a><a href=' + finished + '>&#9745;FINISHED</a></div>';
-		document.getElementById('body').innerHTML += block;;
+		var start = '', finished = ''; // Добавления класса (выборки из me)
+		if (me[i] === 's') { start = 'start'; } else if (me[i] === 'f') { finished = 'finished'; }	
+
+		var block = '<div><p>' + link + '</p><a href=' + myLink + '>MY</a><span class=\'rightNow ' + start + '\'>&#9935;</span><a href=' + startLink + '>START</a><span class=\'rightNow ' + finished + '\'>&#9745;</span><a href=' + finishedLink + '>FINISHED</a></div>';
+
+		document.getElementById('body').innerHTML += block;
 	}	
 
 })();
